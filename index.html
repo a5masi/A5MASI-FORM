@@ -301,73 +301,75 @@
   </button>
 
   <script>
-    // Carousel functionality
-    let currentImageIndex = 0;
-    const images = document.querySelectorAll('.product-image');
-    const dots = document.querySelectorAll('.carousel-dot');
+  // Carousel functionality
+  let currentImageIndex = 0;
+  const images = document.querySelectorAll('.product-image');
+  const dots = document.querySelectorAll('.carousel-dot');
 
-    function showImage(index) {
-      images.forEach(img => img.classList.remove('active'));
-      dots.forEach(dot => dot.classList.remove('active'));
-      
-      images[index].classList.add('active');
-      dots[index].classList.add('active');
-      currentImageIndex = index;
-    }
+  function showImage(index) {
+    images.forEach(img => img.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    images[index].classList.add('active');
+    dots[index].classList.add('active');
+    currentImageIndex = index;
+  }
 
-    function nextImage() {
-      let nextIndex = (currentImageIndex + 1) % images.length;
-      showImage(nextIndex);
-    }
+  function nextImage() {
+    let nextIndex = (currentImageIndex + 1) % images.length;
+    showImage(nextIndex);
+  }
 
-    function prevImage() {
-      let prevIndex = (currentImageIndex - 1 + images.length) % images.length;
-      showImage(prevIndex);
-    }
+  function prevImage() {
+    let prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+    showImage(prevIndex);
+  }
 
-    function goToImage(index) {
-      showImage(index);
-    }
+  function goToImage(index) {
+    showImage(index);
+  }
 
-    // Auto-rotate carousel every 5 seconds
-    setInterval(nextImage, 5000);
+  // Auto-rotate carousel every 5 seconds
+  setInterval(nextImage, 5000);
 
-    // Floating button behavior
-    const floatingBtn = document.getElementById("floatingOrderBtn");
-    const targetBtn = document.querySelector("#submit-button");
+  // Floating button behavior
+  const floatingBtn = document.getElementById("floatingOrderBtn");
+  const targetBtn = document.querySelector("#submit-button");
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          floatingBtn.style.opacity = '0';
-        } else {
-          floatingBtn.style.opacity = '1';
-        }
-      });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        floatingBtn.style.opacity = '0';
+      } else {
+        floatingBtn.style.opacity = '1';
+      }
     });
+  });
 
-    if (targetBtn) {
-      observer.observe(targetBtn);
-    }
+  if (targetBtn) {
+    observer.observe(targetBtn);
+  }
 
-    floatingBtn.addEventListener('click', () => {
-      targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+  floatingBtn.addEventListener('click', () => {
+    targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 
-    // Modal functions
-    function showModal() {
-      document.getElementById('successModal').style.display = 'flex';
-    }
+  // Modal functions
+  function showModal() {
+    document.getElementById('successModal').style.display = 'flex';
+  }
 
-    function closeModal() {
-      document.getElementById('successModal').style.display = 'none';
-    }
+  function closeModal() {
+    document.getElementById('successModal').style.display = 'none';
+  }
 
-    // Form submission to Google Sheets
-    const form = document.getElementById('order-form');
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbwMlsm3i0SArBlyh0VUCxaF6XRc_xsZJsRfaVEkN0TNLS-a0cEzXy-dlDhih8t_D4j2/exec'; // Replace with your deployment URL
+  // Google Sheets Integration
+  const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyasm6M5bHIVPsfAv31um5yJ3iCzVuDz4IEwYcQQD4U5XxTSsUDvkyUuH2PF3I1o9nC/exec'; // Replace with your actual URL
+
+  // Form submission to Google Sheets
+  const form = document.getElementById('order-form');
   
-    form.addEventListener('submit', e => {
+  form.addEventListener('submit', e => {
     e.preventDefault();
     
     // Validate all required fields
@@ -396,26 +398,30 @@
       return;
     }
     
-    // Prepare form data
+    // Prepare form data in format Google Script expects
     const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => data[key] = value);
+    const urlEncodedData = new URLSearchParams();
+    
+    // Convert FormData to URL-encoded format
+    for (const [key, value] of formData.entries()) {
+      urlEncodedData.append(key, value);
+    }
     
     // Send to Google Sheets
     fetch(googleScriptUrl, {
       method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      body: urlEncodedData
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
     .then(data => {
       if(data.result === 'success') {
         showModal();
         form.reset();
       } else {
-        throw new Error(data.error);
+        throw new Error(data.error || 'Unknown error');
       }
     })
     .catch(err => {
@@ -423,47 +429,56 @@
       alert('حدث خطأ! حاول مرة أخرى.');
     });
   });
-</script>
 
-<script>
   // Load product data from Google Sheets
   function loadProductData() {
-    fetch(`${googleScriptUrl}?action=getProducts`)
-      .then(response => response.json())
-      .then(products => {
-        if(products.length > 0) {
-          const product = products[0]; // Get first product (modify as needed)
-          
-          // Update product info
-          document.querySelector('.product-name').innerHTML = 
-            `<strong>اسم المنتج:</strong> ${product.name}`;
-          document.querySelector('.product-price').textContent = 
-            `ثمن المنتج: ${product.price} درهم`;
-            
-          // Update carousel images
-          const carousel = document.querySelector('.carousel-container');
-          product.images.forEach((img, index) => {
-            if(img) {
-              const imgElement = document.createElement('img');
-              imgElement.src = img;
-              imgElement.alt = `product ${index+1}`;
-              imgElement.className = `product-image ${index === 0 ? 'active' : ''}`;
-              carousel.insertBefore(imgElement, carousel.firstChild);
-            }
-          });
-          
-          // Update carousel dots
-          const dotsContainer = document.querySelector('.carousel-nav');
-          dotsContainer.innerHTML = '';
-          product.images.filter(img => img).forEach((img, index) => {
-            const dot = document.createElement('span');
-            dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
-            dot.onclick = () => goToImage(index);
-            dotsContainer.appendChild(dot);
-          });
-        }
-      })
-      .catch(err => console.error('Error loading products:', err));
+    // First clear existing hardcoded images
+    const carousel = document.querySelector('.carousel-container');
+    const existingImages = carousel.querySelectorAll('.product-image');
+    existingImages.forEach(img => img.remove());
+    
+    // For now use hardcoded data - replace with actual fetch when ready
+    const product = {
+      name: "محفظة جديدة فعالة للدراسة و السفر",
+      price: "199",
+      images: [
+        "https://i.ibb.co/SZQH6Ss/7.png",
+        "https://via.placeholder.com/400x300?text=Product+Image+2",
+        "https://via.placeholder.com/400x300?text=Product+Image+3"
+      ]
+    };
+    
+    // Update product info
+    document.querySelector('.product-name').innerHTML = 
+      `<strong>اسم المنتج:</strong> ${product.name}`;
+    document.querySelector('.product-price').textContent = 
+      `ثمن المنتج: ${product.price} درهم`;
+      
+    // Add images to carousel
+    product.images.forEach((img, index) => {
+      if(img) {
+        const imgElement = document.createElement('img');
+        imgElement.src = img;
+        imgElement.alt = `product ${index+1}`;
+        imgElement.className = `product-image ${index === 0 ? 'active' : ''}`;
+        carousel.insertBefore(imgElement, carousel.querySelector('.carousel-nav'));
+      }
+    });
+    
+    // Update carousel dots
+    const dotsContainer = document.querySelector('.carousel-nav');
+    dotsContainer.innerHTML = '';
+    product.images.filter(img => img).forEach((img, index) => {
+      const dot = document.createElement('span');
+      dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+      dot.onclick = () => goToImage(index);
+      dotsContainer.appendChild(dot);
+    });
+    
+    // Reinitialize carousel variables
+    currentImageIndex = 0;
+    images = document.querySelectorAll('.product-image');
+    dots = document.querySelectorAll('.carousel-dot');
   }
   
   // Call this when page loads
