@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>طلب المنتج</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap" rel="stylesheet">
   <style>
@@ -16,7 +17,7 @@
 
     .container {
       padding: 20px;
-      max-width: 500px;
+      max-width: 480px;
       margin: auto;
     }
 
@@ -132,12 +133,58 @@
         <option value="أكثر">أكثر</option>
       </select>
 
-      <button class="submit-btn" type="submit">اضغط هنا للطلب</button>
+      <button id="submit-button" class="submit-btn" type="submit">اضغط هنا للطلب</button>
     </form>
 
     <p id="success-msg">✓ تم استلام طلبك بنجاح! سنتواصل معك قريباً.</p>
   </div>
 
+  <!-- ✅ Floating Button -->
+  <button id="floatingOrderBtn" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 999;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+    cursor: pointer;
+  ">
+    اطلب الآن
+  </button>
+
+  <!-- ✅ Hide floating button when submit button is visible -->
+  <script>
+    const floatingBtn = document.getElementById("floatingOrderBtn");
+    const targetBtn = document.querySelector("#submit-button");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          floatingBtn.style.opacity = '0';
+        } else {
+          floatingBtn.style.opacity = '1';
+        }
+      });
+    });
+
+    if (targetBtn) {
+      observer.observe(targetBtn);
+    }
+
+    floatingBtn.addEventListener('click', () => {
+      targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  </script>
+
+  <!-- ✅ Form submission logic -->
   <script>
     const form = document.getElementById('order-form');
     form.addEventListener('submit', e => {
