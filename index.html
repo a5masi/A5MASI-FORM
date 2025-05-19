@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>طلب المنتج</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap" rel="stylesheet" />
+  <!-- Splide.js CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/css/splide.min.css" />
   <style>
     body {
       font-family: 'Cairo', sans-serif;
@@ -34,16 +36,15 @@
       margin-bottom: 20px;
     }
 
-    .product-image {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      max-width: 100%;
-    }
-
     .product-description {
       margin: 15px 0;
       font-size: 18px;
+    }
+
+    .product-price {
+      margin: 10px 0;
+      font-size: 18px;
+      color: green;
     }
 
     form {
@@ -92,6 +93,25 @@
       margin-top: 20px;
       display: none;
       font-size: 18px;
+      background-color: #e0ffe0;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    #error-msg {
+      color: red;
+      margin-top: 10px;
+      display: none;
+      font-size: 16px;
+      background-color: #ffe0e0;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .splide__slide img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
     }
 
     @media (max-width: 600px) {
@@ -112,19 +132,32 @@
 </head>
 <body>
   <div class="container">
-    <img src="https://i.ibb.co/fYzLg1Cf/a5masi-LOGO-2.png" class="logo" alt="logo">
+    <img src="https://i.ibb.co/fYzLg1Cf/a5masi-LOGO-2.png" class="logo" alt="logo" />
     <div class="form-title">املأ الإستمارة أسفله لطلب المنتج</div>
-    <img src="https://i.ibb.co/SZQH6Ss/7.png" class="product-image" alt="product">
-    
+
+    <!-- Carousel -->
+    <div id="image-carousel" class="splide" aria-label="صور المنتج">
+      <div class="splide__track">
+        <ul class="splide__list">
+          <li class="splide__slide"><img src="https://i.ibb.co/SZQH6Ss/7.png" alt="صورة 1" /></li>
+          <li class="splide__slide"><img src="https://i.ibb.co/SZQH6Ss/8.png" alt="صورة 2" /></li>
+          <li class="splide__slide"><img src="https://i.ibb.co/SZQH6Ss/9.png" alt="صورة 3" /></li>
+          <!-- أضف المزيد من الصور هنا إذا لزم الأمر -->
+        </ul>
+      </div>
+    </div>
+
     <div class="product-description">
       <strong style="color: orange;">اسم المنتج:</strong> محفظة جديدة فعالة للدراسة و السفر
     </div>
+    <div class="product-price">
+      <strong>ثمن المنتج:</strong> 199 درهم
+    </div>
 
     <form id="order-form">
-      <input type="text" name="الاسم" placeholder="الاسم" required>
-      <input type="text" name="العنوان" placeholder="العنوان" required>
-      <input type="tel" name="رقم الهاتف" placeholder="رقم الهاتف" required>
-
+      <input type="text" id="name" name="الاسم" placeholder="الاسم" required />
+      <input type="text" id="address" name="العنوان" placeholder="العنوان" required />
+      <input type="tel" id="phone" name="رقم الهاتف" placeholder="رقم الهاتف" required />
       <select name="الكمية" required>
         <option value="" disabled selected>اختر الكمية</option>
         <option value="1">1</option>
@@ -132,14 +165,14 @@
         <option value="3">3</option>
         <option value="أكثر">أكثر</option>
       </select>
-
       <button id="submit-button" class="submit-btn" type="submit">اضغط هنا للطلب</button>
     </form>
 
     <p id="success-msg">✓ تم استلام طلبك بنجاح! سنتواصل معك قريباً.</p>
+    <p id="error-msg">يرجى ملء جميع الحقول المطلوبة.</p>
   </div>
 
-  <!-- ✅ Floating Button -->
+  <!-- Floating Button -->
   <button id="floatingOrderBtn" style="
     position: fixed;
     bottom: 20px;
@@ -160,8 +193,21 @@
     اطلب الآن
   </button>
 
-  <!-- ✅ Hide floating button when submit button is visible -->
+  <!-- Splide.js JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
   <script>
+    // Initialize Splide carousel
+    document.addEventListener('DOMContentLoaded', function () {
+      new Splide('#image-carousel', {
+        type: 'loop',
+        perPage: 1,
+        autoplay: true,
+        interval: 3000,
+        pauseOnHover: true,
+      }).mount();
+    });
+
+    // Floating button visibility
     const floatingBtn = document.getElementById("floatingOrderBtn");
     const targetBtn = document.querySelector("#submit-button");
 
@@ -182,22 +228,39 @@
     floatingBtn.addEventListener('click', () => {
       targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
-  </script>
 
-  <!-- ✅ Form submission logic -->
-  <script>
+    // Form validation and submission
     const form = document.getElementById('order-form');
-    form.addEventListener('submit', e => {
+    const successMsg = document.getElementById('success-msg');
+    const errorMsg = document.getElementById('error-msg');
+
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
+
+      // Check if all required fields are filled
+      const name = document.getElementById('name').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const quantity = form.querySelector('select').value;
+
+      if (!name || !address || !phone || !quantity) {
+        errorMsg.style.display = 'block';
+        successMsg.style.display = 'none';
+        return;
+      } else {
+        errorMsg.style.display = 'none';
+      }
+
       const data = new FormData(form);
       fetch('https://script.google.com/macros/s/AKfycbwnYsMd0JpPxqUnxnERSfCyZkpQ3wi7HqxdocO4fOh57EcRadrpcraANik2UaS5BT2Q4w/exec', {
         method: 'POST',
         body: data
-      }).then(res => {
-        document.getElementById('success-msg').style.display = 'block';
-        form.reset();
-      }).catch(err => alert('حدث خطأ! حاول مرة أخرى.'));
-    });
-  </script>
-</body>
-</html>
+      })
+      .then(res => {
+        if (res.ok) {
+          successMsg.style.display = 'block';
+          form.reset();
+        } else {
+          alert('حدث خطأ! حاول مرة أخرى
+::contentReference[oaicite:21]{index=21}
+ 
