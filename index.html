@@ -1,6 +1,3 @@
-HTML in Github:
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -10,6 +7,7 @@ HTML in Github:
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* ===== MAIN STYLES ===== */
     body {
       font-family: 'Cairo', sans-serif;
       text-align: center;
@@ -26,32 +24,44 @@ HTML in Github:
     }
 
     .logo {
-      width: 150px; /* Increased logo size */
+      width: 150px;
       max-width: 100%;
       height: auto;
       margin: 20px auto;
       display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
     }
 
     .form-title {
       font-size: 22px;
       margin-bottom: 20px;
+      color: #333;
+      animation: fadeIn 1s ease;
     }
 
+    /* ===== PRODUCT STYLES ===== */
     .product-image {
       width: 100%;
       height: auto;
       border-radius: 10px;
       max-width: 100%;
       display: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
     }
 
     .product-image.active {
       display: block;
+      animation: zoomIn 0.5s ease;
     }
 
     .product-info {
       margin: 15px 0;
+      animation: slideUp 0.8s ease;
     }
 
     .product-name {
@@ -62,12 +72,14 @@ HTML in Github:
 
     .product-price {
       font-size: 18px;
-      color: #4CAF50; /* Green color for price */
+      color: #4CAF50;
       font-weight: bold;
     }
 
+    /* ===== FORM STYLES ===== */
     form {
       margin: auto;
+      animation: fadeIn 1.2s ease;
     }
 
     input, select {
@@ -79,18 +91,26 @@ HTML in Github:
       font-size: 16px;
       font-family: 'Cairo', sans-serif;
       box-sizing: border-box;
+      transition: all 0.3s ease;
     }
 
-    /* Phone number input specific styling */
+    input:focus, select:focus {
+      border-color: orange;
+      box-shadow: 0 0 8px rgba(255,165,0,0.3);
+      outline: none;
+    }
+
+    /* Phone number input */
     input[type="tel"] {
-      text-align: right; /* Placeholder on right */
-      direction: ltr; /* Numbers typed left to right */
+      text-align: right;
+      direction: ltr;
     }
 
     select option {
       font-size: 16px;
     }
 
+    /* Submit button */
     .submit-btn {
       background-color: orange;
       color: white;
@@ -102,29 +122,19 @@ HTML in Github:
       animation: pulse 2s infinite;
       transition: transform 0.2s ease;
       width: 100%;
+      margin-top: 15px;
     }
 
     .submit-btn:hover {
       transform: scale(1.05);
     }
 
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255,165,0, 0.5); }
-      70% { box-shadow: 0 0 0 10px rgba(255,165,0, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255,165,0, 0); }
-    }
-
-    #success-msg {
-      color: green;
-      margin-top: 20px;
-      display: none;
-      font-size: 18px;
-    }
-
-    /* Carousel styles */
+    /* ===== CAROUSEL STYLES ===== */
     .carousel-container {
       position: relative;
       margin: 0 auto;
+      overflow: hidden;
+      border-radius: 10px;
     }
 
     .carousel-nav {
@@ -140,6 +150,7 @@ HTML in Github:
       background-color: #ccc;
       margin: 0 5px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     .carousel-dot.active {
@@ -154,23 +165,30 @@ HTML in Github:
       color: white;
       border: none;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      font-size: 16px;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
       cursor: pointer;
       z-index: 10;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Switched arrow positions */
+    .carousel-arrow:hover {
+      background-color: rgba(0,0,0,0.7);
+    }
+
     .carousel-arrow.left {
-      right: 10px; /* Changed from left to right */
+      right: 15px;
     }
 
     .carousel-arrow.right {
-      left: 10px; /* Changed from right to left */
+      left: 15px;
     }
 
-    /* Modal styles */
+    /* ===== MODAL STYLES ===== */
     .modal {
       display: none;
       position: fixed;
@@ -190,24 +208,81 @@ HTML in Github:
       border-radius: 10px;
       max-width: 80%;
       text-align: center;
-      animation: fadeIn 0.3s;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+      animation: modalFadeIn 0.4s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
 
     .modal-close {
       background-color: orange;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 10px 20px;
       border-radius: 5px;
-      margin-top: 15px;
+      margin-top: 20px;
       cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-size: 16px;
+      transition: all 0.3s ease;
     }
 
+    .modal-close:hover {
+      background-color: #e69500;
+      transform: scale(1.05);
+    }
+
+    /* ===== FLOATING BUTTON ===== */
+    #floatingOrderBtn {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: orange;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 24px;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 999;
+      opacity: 1;
+      transition: all 0.6s ease;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    #floatingOrderBtn:hover {
+      background-color: #e69500;
+      transform: translateX(-50%) scale(1.05);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,165,0, 0.5); }
+      70% { box-shadow: 0 0 0 15px rgba(255,165,0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,165,0, 0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes modalFadeIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* ===== RESPONSIVE STYLES ===== */
     @media (max-width: 600px) {
       .form-title {
         font-size: 20px;
@@ -220,6 +295,12 @@ HTML in Github:
       .submit-btn {
         font-size: 18px;
         padding: 12px;
+      }
+
+      .carousel-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
       }
     }
   </style>
@@ -235,8 +316,8 @@ HTML in Github:
       <img src="https://via.placeholder.com/400x300?text=Product+Image+2" class="product-image" alt="product 2">
       <img src="https://via.placeholder.com/400x300?text=Product+Image+3" class="product-image" alt="product 3">
       
-      <button class="carousel-arrow left" onclick="prevImage()">&#10095;</button> <!-- Switched arrow direction -->
-      <button class="carousel-arrow right" onclick="nextImage()">&#10094;</button> <!-- Switched arrow direction -->
+      <button class="carousel-arrow left" onclick="prevImage()">&#10095;</button>
+      <button class="carousel-arrow right" onclick="nextImage()">&#10094;</button>
       
       <div class="carousel-nav">
         <span class="carousel-dot active" onclick="goToImage(0)"></span>
@@ -283,209 +364,168 @@ HTML in Github:
   </div>
 
   <!-- Floating Button -->
-  <button id="floatingOrderBtn" style="
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: orange;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 12px 24px;
-    font-size: 16px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    z-index: 999;
-    opacity: 1;
-    transition: opacity 0.6s ease;
-    cursor: pointer;
-  ">
+  <button id="floatingOrderBtn">
     اطلب الآن
   </button>
 
   <script>
-  // Carousel functionality
-  let currentImageIndex = 0;
-  const images = document.querySelectorAll('.product-image');
-  const dots = document.querySelectorAll('.carousel-dot');
+    // ===== CAROUSEL FUNCTIONALITY =====
+    let currentImageIndex = 0;
+    let images = document.querySelectorAll('.product-image');
+    let dots = document.querySelectorAll('.carousel-dot');
 
-  function showImage(index) {
-    images.forEach(img => img.classList.remove('active'));
-    dots.forEach(dot => dot.classList.remove('active'));
-    
-    images[index].classList.add('active');
-    dots[index].classList.add('active');
-    currentImageIndex = index;
-  }
-
-  function nextImage() {
-    let nextIndex = (currentImageIndex + 1) % images.length;
-    showImage(nextIndex);
-  }
-
-  function prevImage() {
-    let prevIndex = (currentImageIndex - 1 + images.length) % images.length;
-    showImage(prevIndex);
-  }
-
-  function goToImage(index) {
-    showImage(index);
-  }
-
-  // Auto-rotate carousel every 5 seconds
-  setInterval(nextImage, 5000);
-
-  // Floating button behavior
-  const floatingBtn = document.getElementById("floatingOrderBtn");
-  const targetBtn = document.querySelector("#submit-button");
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        floatingBtn.style.opacity = '0';
-      } else {
-        floatingBtn.style.opacity = '1';
-      }
-    });
-  });
-
-  if (targetBtn) {
-    observer.observe(targetBtn);
-  }
-
-  floatingBtn.addEventListener('click', () => {
-    targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-
-  // Modal functions
-  function showModal() {
-    document.getElementById('successModal').style.display = 'flex';
-  }
-
-  function closeModal() {
-    document.getElementById('successModal').style.display = 'none';
-  }
-
-  // Google Sheets Integration
-  const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyasm6M5bHIVPsfAv31um5yJ3iCzVuDz4IEwYcQQD4U5XxTSsUDvkyUuH2PF3I1o9nC/exec'; // Replace with your actual URL
-
-  // Form submission to Google Sheets
-  const form = document.getElementById('order-form');
-  
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    
-    // Validate all required fields
-    const requiredFields = form.querySelectorAll('[required]');
-    let isValid = true;
-    
-    requiredFields.forEach(field => {
-      if (!field.value.trim()) {
-        isValid = false;
-        field.style.borderColor = 'red';
-      } else {
-        field.style.borderColor = '#aaa';
-      }
-    });
-    
-    if (!isValid) {
-      alert('الرجاء ملء جميع الحقول المطلوبة!');
-      return;
-    }
-    
-    // Validate phone number
-    const phoneField = form.querySelector('input[type="tel"]');
-    if (!phoneField.checkValidity()) {
-      alert('يرجى إدخال رقم هاتف صحيح (10 أرقام)');
-      phoneField.style.borderColor = 'red';
-      return;
-    }
-    
-    // Prepare form data in format Google Script expects
-    const formData = new FormData(form);
-    const urlEncodedData = new URLSearchParams();
-    
-    // Convert FormData to URL-encoded format
-    for (const [key, value] of formData.entries()) {
-      urlEncodedData.append(key, value);
-    }
-    
-    // Send to Google Sheets
-    fetch(googleScriptUrl, {
-      method: 'POST',
-      body: urlEncodedData
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-    })
-    .then(data => {
-      if(data.result === 'success') {
-        showModal();
-        form.reset();
-      } else {
-        throw new Error(data.error || 'Unknown error');
-      }
-    })
-    .catch(err => {
-      console.error('Error:', err);
-      alert('حدث خطأ! حاول مرة أخرى.');
-    });
-  });
-
-  // Load product data from Google Sheets
-  function loadProductData() {
-    // First clear existing hardcoded images
-    const carousel = document.querySelector('.carousel-container');
-    const existingImages = carousel.querySelectorAll('.product-image');
-    existingImages.forEach(img => img.remove());
-    
-    // For now use hardcoded data - replace with actual fetch when ready
-    const product = {
-      name: "محفظة جديدة فعالة للدراسة و السفر",
-      price: "199",
-      images: [
-        "https://i.ibb.co/SZQH6Ss/7.png",
-        "https://via.placeholder.com/400x300?text=Product+Image+2",
-        "https://via.placeholder.com/400x300?text=Product+Image+3"
-      ]
-    };
-    
-    // Update product info
-    document.querySelector('.product-name').innerHTML = 
-      `<strong>اسم المنتج:</strong> ${product.name}`;
-    document.querySelector('.product-price').textContent = 
-      `ثمن المنتج: ${product.price} درهم`;
+    function showImage(index) {
+      images.forEach(img => img.classList.remove('active'));
+      dots.forEach(dot => dot.classList.remove('active'));
       
-    // Add images to carousel
-    product.images.forEach((img, index) => {
-      if(img) {
-        const imgElement = document.createElement('img');
-        imgElement.src = img;
-        imgElement.alt = `product ${index+1}`;
-        imgElement.className = `product-image ${index === 0 ? 'active' : ''}`;
-        carousel.insertBefore(imgElement, carousel.querySelector('.carousel-nav'));
+      images[index].classList.add('active');
+      dots[index].classList.add('active');
+      currentImageIndex = index;
+    }
+
+    function nextImage() {
+      let nextIndex = (currentImageIndex + 1) % images.length;
+      showImage(nextIndex);
+    }
+
+    function prevImage() {
+      let prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+      showImage(prevIndex);
+    }
+
+    function goToImage(index) {
+      showImage(index);
+    }
+
+    // Auto-rotate carousel every 5 seconds
+    let carouselInterval = setInterval(nextImage, 5000);
+
+    // Pause on hover
+    document.querySelector('.carousel-container').addEventListener('mouseenter', () => {
+      clearInterval(carouselInterval);
+    });
+
+    document.querySelector('.carousel-container').addEventListener('mouseleave', () => {
+      carouselInterval = setInterval(nextImage, 5000);
+    });
+
+    // ===== FLOATING BUTTON BEHAVIOR =====
+    const floatingBtn = document.getElementById("floatingOrderBtn");
+    const targetBtn = document.querySelector("#submit-button");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          floatingBtn.style.opacity = '0';
+          floatingBtn.style.pointerEvents = 'none';
+        } else {
+          floatingBtn.style.opacity = '1';
+          floatingBtn.style.pointerEvents = 'auto';
+        }
+      });
+    });
+
+    if (targetBtn) {
+      observer.observe(targetBtn);
+    }
+
+    floatingBtn.addEventListener('click', () => {
+      targetBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // ===== MODAL FUNCTIONS =====
+    function showModal() {
+      document.getElementById('successModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('successModal').style.display = 'none';
+    }
+
+    // ===== FORM SUBMISSION =====
+    const form = document.getElementById('order-form');
+    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyasm6M5bHIVPsfAv31um5yJ3iCzVuDz4IEwYcQQD4U5XxTSsUDvkyUuH2PF3I1o9nC/exec'; // REPLACE THIS WITH YOUR URL
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      try {
+        // 1. Validate all required fields
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            isValid = false;
+            field.style.borderColor = 'red';
+          } else {
+            field.style.borderColor = '#aaa';
+          }
+        });
+        
+        if (!isValid) {
+          throw new Error('الرجاء ملء جميع الحقول المطلوبة!');
+        }
+        
+        // 2. Validate phone number
+        const phone = form.querySelector('[name="رقم الهاتف"]').value;
+        if (!/^\d{10}$/.test(phone)) {
+          form.querySelector('[name="رقم الهاتف"]').style.borderColor = 'red';
+          throw new Error('يرجى إدخال رقم هاتف صحيح (10 أرقام)');
+        }
+        
+        // 3. Prepare form data
+        const formData = {
+          'الاسم': form.querySelector('[name="الاسم"]').value,
+          'العنوان': form.querySelector('[name="العنوان"]').value,
+          'رقم الهاتف': phone,
+          'الكمية': form.querySelector('[name="الكمية"]').value
+        };
+        
+        console.log('Form data prepared:', formData);
+        
+        // 4. Show loading state
+        const submitBtn = form.querySelector('[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'جاري الإرسال...';
+        
+        // 5. Send to Google Sheets
+        const response = await fetch(googleScriptUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+          throw new Error('فشل الاتصال بالسيرفر');
+        }
+        
+        const result = await response.json();
+        
+        if (result.result === 'success') {
+          showModal();
+          form.reset();
+        } else {
+          throw new Error(result.error || 'حدث خطأ غير متوقع');
+        }
+        
+      } catch (error) {
+        console.error('Submission error:', error);
+        alert(error.message);
+      } finally {
+        const submitBtn = form.querySelector('[type="submit"]');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'اضغط هنا للطلب';
       }
     });
-    
-    // Update carousel dots
-    const dotsContainer = document.querySelector('.carousel-nav');
-    dotsContainer.innerHTML = '';
-    product.images.filter(img => img).forEach((img, index) => {
-      const dot = document.createElement('span');
-      dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
-      dot.onclick = () => goToImage(index);
-      dotsContainer.appendChild(dot);
+
+    // ===== INITIALIZE PAGE =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // Any initialization code can go here
+      console.log('Page loaded successfully');
     });
-    
-    // Reinitialize carousel variables
-    currentImageIndex = 0;
-    images = document.querySelectorAll('.product-image');
-    dots = document.querySelectorAll('.carousel-dot');
-  }
-  
-  // Call this when page loads
-  document.addEventListener('DOMContentLoaded', loadProductData);
-</script>
+  </script>
 </body>
 </html>
